@@ -6,12 +6,6 @@ import { useTheme } from "next-themes";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 export const ModeToggle = () => {
   const { theme, setTheme } = useTheme();

@@ -1,12 +1,11 @@
 "use client";
 import React from "react";
 import { ModeToggle } from "./mode-toggle";
-import { Input } from "./ui/input";
-import { useState } from "react";
+
 import { CommandDialogDemo } from "./Palette";
-import { Github } from "lucide-react";
+
 import { DiGithubBadge } from "react-icons/di";
-import { Button } from "./ui/button";
+
 import Link from "next/link";
 
 const Navigation = () => {
