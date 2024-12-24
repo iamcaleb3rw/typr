@@ -4,8 +4,8 @@ import { Button } from "./ui/button";
 import Img from "@/public/downloads.png";
 const Hero = () => {
   return (
-    <section className="h-[80vh] grid grid-cols-12 border">
-      <div className="col-span-12 md:col-span-6   border-r-0 flex gap-4 flex-col px-6">
+    <section className="h-[80vh] grid grid-cols-12">
+      <div className="col-span-12 md:col-span-6   flex gap-4 flex-col px-6">
         <div className="h-[55%] mt-3 flex flex-col border-b border-dashed justify-center">
           <h1 className="text-2xl sm:text-3xl mt-6 tracking-tight font-bold">
             {" "}
