@@ -46,7 +46,7 @@ export function CommandDialogDemo() {
         onClick={() => setOpen(true)}
       >
         <div>
-          <p className="text-muted-foreground text-sm ml-4">
+          <p className="text-muted-foreground text-sm ml-4 line-clamp-1">
             Browse the platform..
           </p>
         </div>

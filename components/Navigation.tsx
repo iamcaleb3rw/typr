@@ -17,7 +17,10 @@ const Navigation = () => {
         </h1>
       </div>
       <div className="flex items-center gap-2 ">
-        <CommandDialogDemo />
+        <div className="hidden md:block">
+          <CommandDialogDemo />
+        </div>
+
         <Link href={"https://github.com/iamcaleb3rw"} target="_blank">
           <DiGithubBadge className="w-6 h-6" />
         </Link>
