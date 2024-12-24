@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { Button } from "./ui/button";
-import { ArrowUpRight } from "lucide-react";
 import Img from "@/public/downloads.png";
 const Hero = () => {
   return (
