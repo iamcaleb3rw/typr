@@ -7,7 +7,7 @@ import React from "react";
 
 const ScribeId = async ({ params }: { params: { scribeId: string } }) => {
   // Await params before accessing its properties
-  const { scribeId } = await params;
+  const { scribeId } = params;
 
   if (!scribeId) {
     return redirect("/");
