@@ -15,7 +15,7 @@ interface EditorProps {
   id: string | null | undefined;
 }
 
-export const CodeEditor = ({
+const CodeEditor = ({
   initialHtml,
   initialCss,
   initialJs,
@@ -30,18 +30,18 @@ export const CodeEditor = ({
   const [jsValue, setJSValue] = useState<string | undefined>(initialJs ?? "");
 
   // Using ref for srcDoc to avoid unnecessary re-renders
-  const srcDocRef = useRef<string>("");
+  const [srcDoc, setSrcDoc] = useState<string | undefined>("");
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      srcDocRef.current = `
-        <html>
-          <body>${htmlValue}</body>
-          <style>${cssValue}</style>
-          <script>${jsValue}</script>
-        </html>
-      `;
-    }, 200);
+      setSrcDoc(`
+          <html>
+            <body>${htmlValue}</body>
+            <style>${cssValue}</style>
+            <script>${jsValue}</script>
+          </html>
+        `);
+    }, 50);
 
     return () => clearTimeout(timeout);
   }, [htmlValue, cssValue, jsValue]); // Only rerun when one of these values changes
@@ -123,7 +123,7 @@ export const CodeEditor = ({
       {/* Preview */}
       <div className="border h-[40vh]">
         <iframe
-          srcDoc={srcDocRef.current} // Use the ref value instead of state
+          srcDoc={srcDoc} // Use the ref value instead of state
           title="output"
           sandbox="allow-scripts"
           frameBorder={"0"}
@@ -134,3 +134,5 @@ export const CodeEditor = ({
     </div>
   );
 };
+
+export default CodeEditor;

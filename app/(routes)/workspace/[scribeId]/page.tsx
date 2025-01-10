@@ -1,9 +1,9 @@
+import CodeEditor from "@/components/code-editor";
 import { db } from "@/db";
 import { scribes } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import React from "react";
-import { CodeEditor } from "./_components/Editor";
 
 const ScribeId = async ({ params }: { params: { scribeId: string } }) => {
   // Await params before accessing its properties
