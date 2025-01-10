@@ -6,14 +6,11 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 // Define types for the page props
-interface PageProps {
-  params: {
-    scribeId: string;
-  };
-}
+type Params = Promise<{ scribeId: string }>;
 
-const ScribeId = async ({ params }: PageProps) => {
-  const { scribeId } = params;
+const ScribeId = async (props: { params: Params }) => {
+  const params = await props.params;
+  const scribeId = params.scribeId;
 
   if (!scribeId) {
     return redirect("/");
