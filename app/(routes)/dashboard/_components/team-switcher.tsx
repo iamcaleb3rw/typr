@@ -12,7 +12,6 @@ import {
 import { useUser } from "@clerk/nextjs";
 
 export function TeamSwitcher() {
-  const { isMobile } = useSidebar();
   const { user } = useUser();
   console.log(user);
 
