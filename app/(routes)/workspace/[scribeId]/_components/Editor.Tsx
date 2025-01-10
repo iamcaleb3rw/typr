@@ -5,6 +5,7 @@ import { html as htmlLang } from "@codemirror/lang-html";
 import { css as cssLang } from "@codemirror/lang-css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import React from "react";
 import { toast, Toaster } from "sonner";
 
 interface EditorProps {
@@ -14,12 +15,12 @@ interface EditorProps {
   id: string | null | undefined;
 }
 
-export default function Editor({
+export const CodeEditor = ({
   initialHtml,
   initialCss,
   initialJs,
   id,
-}: EditorProps) {
+}: EditorProps) => {
   const [htmlValue, setHtmlValue] = useState<string | undefined>(
     initialHtml ?? ""
   );
@@ -86,7 +87,7 @@ export default function Editor({
             value={htmlValue}
             onChange={setHtmlValue}
             theme={"dark"}
-            className="h-full border-t w-[700px] bg-[#282C34] overflow-auto" // Removed overflow-x-hidden to ensure wrapping works
+            className="h-full border-t w-[700pxs] bg-[#282C34] overflow-auto" // Removed overflow-x-hidden to ensure wrapping works
           />
         </div>
 
@@ -132,4 +133,4 @@ export default function Editor({
       </div>
     </div>
   );
-}
+};
