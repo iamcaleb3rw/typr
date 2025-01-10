@@ -8,20 +8,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { Cog, Compass, LayoutList, PlusCircle } from "lucide-react";
-import {
-  Dialog,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { DialogContent } from "@radix-ui/react-dialog";
-import path from "path";
+
 import Link from "next/link";
 
 const platformRoutes = [
