@@ -1,18 +1,6 @@
 "use client";
 
 import * as React from "react";
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
 
 import {
   Sidebar,
@@ -25,9 +13,6 @@ import { TeamSwitcher } from "./team-switcher";
 import { NavProjects } from "./nav-projects";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
-
-// This is sample data.
-
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
