@@ -4,9 +4,13 @@ import { scribes } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
 const DashBoardPage = async () => {
   const { userId } = await auth();
+  if (!userId) {
+    return redirect("/sign-up");
+  }
   const scribesProjects = await db
     .select()
     .from(scribes)
