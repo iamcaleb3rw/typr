@@ -5,15 +5,24 @@ import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import React from "react";
 
-const ScribeId = async ({ params }: { params: { scribeId: string } }) => {
-  // Await params before accessing its propertie
-  const { scribeId } = await params;
+// Define types for the page props
+interface PageProps {
+  params: {
+    scribeId: string;
+  };
+}
+
+const ScribeId = async ({ params }: PageProps) => {
+  const { scribeId } = params;
+
   if (!scribeId) {
     return redirect("/");
   }
 
   let scribe = null;
+
   try {
+    // Fetch the scribe from the database asynchronously
     scribe = await db
       .select()
       .from(scribes)
@@ -21,7 +30,7 @@ const ScribeId = async ({ params }: { params: { scribeId: string } }) => {
       .limit(1);
 
     if (scribe.length < 1) {
-      return redirect("/");
+      throw new Error("Scribe not found");
     }
 
     const { html, css, js } = scribe[0];
@@ -41,6 +50,9 @@ const ScribeId = async ({ params }: { params: { scribeId: string } }) => {
 
     // Handle redirect if there's an error
     return redirect("/");
+  } finally {
+    // This block will run regardless of success or error
+    console.log("Scribe fetch attempt finished");
   }
 };
 
