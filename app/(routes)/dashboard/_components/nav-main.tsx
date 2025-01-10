@@ -12,6 +12,8 @@ import {
 import { Cog, Compass, LayoutList, PlusCircle } from "lucide-react";
 
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 
 const platformRoutes = [
   {
@@ -43,6 +45,7 @@ const platformRoutes = [
 ];
 
 export function NavMain() {
+  const path = usePathname();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -50,7 +53,13 @@ export function NavMain() {
         {platformRoutes.map((route) => (
           <Link href={route.path} key={route.label}>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip={route.label}>
+              <SidebarMenuButton
+                tooltip={route.label}
+                className={cn(
+                  ``,
+                  route.path === path && "bg-muted-foreground/10"
+                )}
+              >
                 <route.icon />
                 <span>{route.label}</span>
               </SidebarMenuButton>
