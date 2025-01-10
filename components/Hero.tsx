@@ -2,6 +2,8 @@ import Image from "next/image";
 
 import { Button } from "./ui/button";
 import Img from "@/public/downloads.png";
+import Link from "next/link";
+import Marquee from "./ui/marquee";
 const Hero = () => {
   return (
     <section className="h-[80vh] grid grid-cols-12">
@@ -16,9 +18,11 @@ const Hero = () => {
             our community and win prizes
           </p>
           <div className="mt-4">
-            <Button className="bg-lime-400 text-black w-full mb-2">
-              Join the community
-            </Button>
+            <Link href={"/workspace"}>
+              <Button className="bg-lime-400 text-black w-full mb-2 hover:bg-lime-500">
+                Start Coding
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -47,7 +51,14 @@ const Hero = () => {
           />
         </div>
       </div>
-      <div className="border border-red-400 w-full col-span-12"> yoooo</div>
+      <div className="border border-red-400 w-full col-span-12">
+        <Marquee className="[--duration:60s]">
+          <div className="w-16 h-16 border flex items-center justify-center">
+            Yooo
+          </div>
+          <div>Yoo</div>
+        </Marquee>
+      </div>
     </section>
   );
 };

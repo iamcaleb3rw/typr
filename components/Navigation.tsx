@@ -7,6 +7,7 @@ import { CommandDialogDemo } from "./Palette";
 import { DiGithubBadge } from "react-icons/di";
 
 import Link from "next/link";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const Navigation = () => {
   return (
@@ -20,7 +21,10 @@ const Navigation = () => {
         <div className="hidden md:block">
           <CommandDialogDemo />
         </div>
-
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+        <SignedOut>Sign In</SignedOut>
         <Link href={"https://github.com/iamcaleb3rw"} target="_blank">
           <DiGithubBadge className="w-6 h-6" />
         </Link>
