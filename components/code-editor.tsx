@@ -7,13 +7,20 @@ import { javascript } from "@codemirror/lang-javascript";
 import { html as htmlLang } from "@codemirror/lang-html";
 import { css as cssLang } from "@codemirror/lang-css";
 import { Button } from "./ui/button";
-import { Loader2 } from "lucide-react";
+import { Heart, Loader2 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
+import { v4 as uuidv4 } from "uuid";
+import { db } from "@/db";
+import { count } from "drizzle-orm";
 
 interface EditorProps {
   initialHtml: string | null | undefined;
   initialCss: string | null | undefined;
   initialJs: string | null | undefined;
   id: string | null | undefined;
+  title: string | null | undefined;
+  likes: any;
+  isAlreadyLiked: boolean;
 }
 
 const CodeEditor = ({
@@ -21,7 +28,15 @@ const CodeEditor = ({
   initialCss,
   initialJs,
   id,
+  likes,
+  isAlreadyLiked,
+  title,
 }: EditorProps) => {
+  const { userId } = useAuth();
+
+  const [likeCount, setLikeCount] = useState(likes);
+  const [isLiked, setIsLiked] = useState<boolean>(isAlreadyLiked);
+
   const [htmlValue, setHtmlValue] = useState<string | undefined>(
     initialHtml ?? ""
   );
@@ -69,6 +84,52 @@ const CodeEditor = ({
     }
   };
 
+  const handleLike = async () => {
+    try {
+      const response = await axios.post("/api/like-scribe", {
+        id: uuidv4(),
+        coderId: userId,
+        scribeId: id,
+      });
+
+      if (response.status === 200) {
+        toast.success("Like was successfully added");
+        setIsLiked(true);
+        setLikeCount(likeCount + 1);
+      } else {
+        toast.error("Failed to save the code.");
+      }
+    } catch (error) {
+      toast.error("Error saving code.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDislike = async () => {
+    try {
+      const response = await axios.delete("/api/unlike-scribes", {
+        data: {
+          id: uuidv4(),
+          coderId: userId,
+          scribeId: id,
+        },
+      });
+
+      if (response.status === 200) {
+        toast.success("Like was successfully removed");
+        setIsLiked(false);
+        setLikeCount(likeCount - 1);
+      } else {
+        toast.error("Failed to save the code.");
+      }
+    } catch (error) {
+      toast.error("Error saving code.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   // Handle the keydown event for Ctrl+S or Cmd+S
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -90,23 +151,46 @@ const CodeEditor = ({
 
   return (
     <div className="flex flex-col gap-1">
-      <Button
-        onClick={handleSave}
-        disabled={saving}
-        variant={"outline"}
-        className="  px-4 py-2 "
-      >
-        {saving ? (
-          <div className="flex items-center gap-2">
-            Saving{" "}
-            <span>
-              <Loader2 className="animate-spin" />
-            </span>
+      <div className="flex items-center justify-between px-5 py-1">
+        <div>{title}</div>
+        <div className="flex items-center gap-4">
+          <div
+            onClick={!isLiked ? handleLike : handleDislike}
+            className="flex items-center cursor-pointer text-sm gap-2"
+          >
+            {likeCount} Likes
+            <Heart
+              className="h-5 w-5"
+              fill={isLiked ? "red" : "transparent"}
+              color={isLiked ? "red" : "white"}
+            />
           </div>
-        ) : (
-          "Save"
-        )}
-      </Button>
+          <div>
+            <Button
+              onClick={handleSave}
+              disabled={saving}
+              variant={"outline"}
+              className="px-1 rounded-xl hover:bg-muted/30"
+            >
+              {saving ? (
+                <div className="flex items-center gap-2">
+                  Saving{" "}
+                  <span>
+                    <Loader2 className="animate-spin" />
+                  </span>
+                </div>
+              ) : (
+                <span className="flex gap-4 items-center">
+                  <span className="ml-1 font-normal text-muted-foreground">
+                    Save
+                  </span>
+                  <span className="bg-muted py-1 px-3 rounded-lg">ctrl+s</span>
+                </span>
+              )}
+            </Button>
+          </div>
+        </div>
+      </div>
       <div className="grid grid-cols-3 gap-1">
         {/* HTML Editor */}
         <div className="relative border bg-[#282C34] h-[50vh] flex flex-col rounded-md overflow-hidden">

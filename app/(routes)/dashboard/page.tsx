@@ -8,7 +8,7 @@ import { formatDistanceToNow } from "date-fns";
 
 import Image from "next/image";
 import defaultAvatar from "@/public/defaultAvatar.png";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -58,18 +58,19 @@ const DashBoardPage = async () => {
           return (
             <div
               key={project.id}
-              className="overflow-hidden border h-[270px] pb-2 rounded-xl grid grid-rows-5"
+              className="relative overflow-hidden border h-[270px] pb-2 rounded-xl grid grid-rows-5"
             >
               <div className="relative justify-between flex flex-col overflow-auto row-span-3 border-b bg-muted">
                 <div>
                   <div className="text-xl  p-2 flex justify-between items-center">
                     <div className="mx-3 my-1">{project.title}</div>
-                    <div>
+                    <div className="flex gap-1">
+                      <div>
+                        <Heart className="font-thin w-5 h-5" fill="#fff" />
+                      </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger>
-                          <Button variant={"outline"} className="h-8 w-8">
-                            <Ellipsis className="h-5 w-5" />
-                          </Button>
+                          <Ellipsis className="h-5 w-5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                           <DropdownMenuLabel>Scribe Menu</DropdownMenuLabel>

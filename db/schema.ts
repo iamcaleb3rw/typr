@@ -25,13 +25,37 @@ export const scribes = pgTable("scribes", {
     .$onUpdate(() => new Date()),
 });
 
+export const likes = pgTable("likes", {
+  id: varchar("id").primaryKey(),
+  scribeId: varchar("scribeId")
+    .notNull()
+    .references(() => scribes.id, { onDelete: "cascade" }),
+  coderId: varchar("coderId")
+    .notNull()
+    .references(() => coders.id, { onDelete: "cascade" }),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+});
+
 export const coderRelations = relations(coders, ({ many }) => ({
   scribes: many(scribes),
+  likes: many(likes),
 }));
 
-export const scribeRelations = relations(scribes, ({ one }) => ({
+export const scribeRelations = relations(scribes, ({ one, many }) => ({
   coder: one(coders, {
     fields: [scribes.authorId],
+    references: [coders.id],
+  }),
+  likes: many(likes),
+}));
+
+export const likeRelations = relations(likes, ({ one }) => ({
+  scribe: one(scribes, {
+    fields: [likes.scribeId],
+    references: [scribes.id],
+  }),
+  coder: one(coders, {
+    fields: [likes.coderId],
     references: [coders.id],
   }),
 }));

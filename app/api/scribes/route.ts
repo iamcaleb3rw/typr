@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   if (!userId) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
-  console.log(userId);
+
   const user = await currentUser(); // Get user details from Clerk
 
   // Check if the user exists in the 'coders' table
@@ -51,8 +51,6 @@ export async function POST(request: Request) {
       js: "",
       authorId: userId, // Use the userId to link the scribe to the user
     });
-    console.log(newScribe);
-
     return new NextResponse(JSON.stringify({ id: scribeId }), {
       status: 201,
       headers: { "Content-Type": "application/json" },

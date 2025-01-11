@@ -13,6 +13,8 @@ import { useUser } from "@clerk/nextjs";
 
 export function TeamSwitcher() {
   const { user } = useUser();
+
+  const userEmail = user?.primaryEmailAddress?.emailAddress ?? "";
   console.log(user);
 
   return (
@@ -26,9 +28,7 @@ export function TeamSwitcher() {
             <WiMeteor size={20} />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate-1 font-semibold">
-              {user?.username}&apos;s typr
-            </span>
+            <span className="truncate-1 font-semibold">typr</span>
           </div>
         </SidebarMenuButton>
       </SidebarMenuItem>

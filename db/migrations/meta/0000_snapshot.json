@@ -1,5 +1,5 @@
 {
-  "id": "eb0085da-32ec-44af-b5ef-49a412788ea9",
+  "id": "3299bc81-96d3-4453-92fb-baa1560054f1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -39,6 +39,71 @@
           ]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.likes": {
+      "name": "likes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "scribeId": {
+          "name": "scribeId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "coderId": {
+          "name": "coderId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "likes_scribeId_scribes_id_fk": {
+          "name": "likes_scribeId_scribes_id_fk",
+          "tableFrom": "likes",
+          "tableTo": "scribes",
+          "columnsFrom": [
+            "scribeId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "likes_coderId_coders_id_fk": {
+          "name": "likes_coderId_coders_id_fk",
+          "tableFrom": "likes",
+          "tableTo": "coders",
+          "columnsFrom": [
+            "coderId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

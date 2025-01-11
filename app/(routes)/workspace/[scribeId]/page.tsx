@@ -1,7 +1,8 @@
 import CodeEditor from "@/components/code-editor";
 import { db } from "@/db";
-import { scribes } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { likes, scribes } from "@/db/schema";
+import { auth } from "@clerk/nextjs/server";
+import { and, count, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -9,14 +10,20 @@ import React from "react";
 type Params = Promise<{ scribeId: string }>;
 
 const ScribeId = async (props: { params: Params }) => {
+  const { userId } = await auth();
   const params = await props.params;
   const scribeId = params.scribeId;
+  if (!userId) {
+    return redirect("/sign-up");
+  }
 
   if (!scribeId) {
     return redirect("/");
   }
 
   let scribe = null;
+  let likeCount = null;
+  let existingLike = null;
 
   try {
     // Fetch the scribe from the database asynchronously
@@ -30,7 +37,18 @@ const ScribeId = async (props: { params: Params }) => {
       throw new Error("Scribe not found");
     }
 
-    const { html, css, js } = scribe[0];
+    likeCount = await db
+      .select({ count: count() })
+      .from(likes)
+      .where(eq(likes.scribeId, scribeId));
+
+    existingLike = await db
+      .select()
+      .from(likes)
+      .where(and(eq(likes.scribeId, scribeId), eq(likes.coderId, userId)));
+    const { html, css, js, title } = scribe[0];
+    const isAlreadyLiked = existingLike.length > 0;
+    const totalLikes = likeCount[0].count;
 
     return (
       <div>
@@ -39,6 +57,9 @@ const ScribeId = async (props: { params: Params }) => {
           initialCss={css}
           initialJs={js}
           id={scribeId}
+          likes={totalLikes}
+          title={title}
+          isAlreadyLiked={isAlreadyLiked}
         />
       </div>
     );
