@@ -111,7 +111,12 @@ const DashBoardPage = async () => {
                     />
                   </div>
                   <div className="text-xs text-muted-foreground flex flex-col">
-                    <div>By-{user?.username || user?.firstName}</div>
+                    <div>
+                      By-
+                      {user?.username ||
+                        user?.firstName ||
+                        user?.primaryEmailAddress?.emailAddress}
+                    </div>
                     <div>
                       <span>Last updated •</span>
                       <span>
