@@ -1,11 +1,11 @@
-import DotPattern from "@/components/ui/dot-pattern";
 import { db } from "@/db";
 import { scribes } from "@/db/schema";
-import { cn } from "@/lib/utils";
+
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
+
 import Image from "next/image";
 import defaultAvatar from "@/public/defaultAvatar.png";
 import { Ellipsis } from "lucide-react";
@@ -18,6 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 const DashBoardPage = async () => {
   const { userId } = await auth();
@@ -28,7 +29,8 @@ const DashBoardPage = async () => {
   const scribesProjects = await db
     .select()
     .from(scribes)
-    .where(eq(scribes.authorId, userId));
+    .where(eq(scribes.authorId, userId))
+    .orderBy(desc(scribes.updatedAt));
 
   return (
     <div className="px-3">
@@ -72,7 +74,22 @@ const DashBoardPage = async () => {
                         <DropdownMenuContent>
                           <DropdownMenuLabel>Scribe Menu</DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem>Edit Scribe</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Link
+                              href={`/workspace/${project.id}`}
+                              target="_blank"
+                            >
+                              Go to scribe scribe
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Link
+                              href={`/workspace/${project.id}`}
+                              target="_blank"
+                            >
+                              Edit scribe
+                            </Link>
+                          </DropdownMenuItem>
                           <DropdownMenuItem>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -121,7 +138,7 @@ const DashBoardPage = async () => {
                 </div>
                 <div className="text-xs flex items-center gap-1">
                   <span className="h-3 w-3 bg-yellow-500 rounded-full"></span>
-                  <p>JS: {htmlPercentage}%</p>
+                  <p>JS: {jsPercentage}%</p>
                 </div>
               </div>
               <div className="w-full h-2 px-3">

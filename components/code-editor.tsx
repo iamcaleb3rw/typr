@@ -1,12 +1,13 @@
 "use client";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "sonner";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { html as htmlLang } from "@codemirror/lang-html";
 import { css as cssLang } from "@codemirror/lang-css";
-import { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import React from "react";
-import { toast, Toaster } from "sonner";
+import { Button } from "./ui/button";
+import { Loader2 } from "lucide-react";
 
 interface EditorProps {
   initialHtml: string | null | undefined;
@@ -31,24 +32,24 @@ const CodeEditor = ({
 
   // Using ref for srcDoc to avoid unnecessary re-renders
   const [srcDoc, setSrcDoc] = useState<string | undefined>("");
-
+  const [saving, setSaving] = useState<boolean>(false);
   useEffect(() => {
     const timeout = setTimeout(() => {
       setSrcDoc(`
-          <html>
-            <body>${htmlValue}</body>
-            <style>${cssValue}</style>
-            <script>${jsValue}</script>
-          </html>
-        `);
+        <html>
+          <body>${htmlValue}</body>
+          <style>${cssValue}</style>
+          <script>${jsValue}</script>
+        </html>
+      `);
     }, 50);
 
     return () => clearTimeout(timeout);
   }, [htmlValue, cssValue, jsValue]); // Only rerun when one of these values changes
 
-  // Save function using axios
   const handleSave = async () => {
     try {
+      setSaving(true);
       const response = await axios.post("/api/save-code", {
         id,
         html: htmlValue,
@@ -57,25 +58,55 @@ const CodeEditor = ({
       });
 
       if (response.status === 200) {
-        alert("Code was successfully saved.");
+        toast.success("Code was successfully saved.");
       } else {
-        console.error("Failed to save code", response.statusText);
         toast.error("Failed to save the code.");
       }
     } catch (error) {
-      console.error("Error saving code:", error);
       toast.error("Error saving code.");
+    } finally {
+      setSaving(false);
     }
   };
 
+  // Handle the keydown event for Ctrl+S or Cmd+S
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check if "Ctrl" (or "Cmd") and "S" are pressed simultaneously
+      if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+        event.preventDefault(); // Prevent the default save action
+        handleSave(); // Trigger the save function
+      }
+    };
+
+    // Add event listener on mount
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Clean up the event listener on unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [htmlValue, cssValue, jsValue]); // Triggered when values change
+
   return (
     <div className="flex flex-col gap-1">
-      <button
+      <Button
         onClick={handleSave}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+        disabled={saving}
+        variant={"outline"}
+        className="  px-4 py-2 "
       >
-        Save
-      </button>
+        {saving ? (
+          <div className="flex items-center gap-2">
+            Saving{" "}
+            <span>
+              <Loader2 className="animate-spin" />
+            </span>
+          </div>
+        ) : (
+          "Save"
+        )}
+      </Button>
       <div className="grid grid-cols-3 gap-1">
         {/* HTML Editor */}
         <div className="relative border bg-[#282C34] h-[50vh] flex flex-col rounded-md overflow-hidden">
@@ -87,7 +118,7 @@ const CodeEditor = ({
             value={htmlValue}
             onChange={setHtmlValue}
             theme={"dark"}
-            className="h-full border-t w-[700pxs] bg-[#282C34] overflow-auto" // Removed overflow-x-hidden to ensure wrapping works
+            className="h-full border-t w-[700px] bg-[#282C34] overflow-auto"
           />
         </div>
 
@@ -101,7 +132,7 @@ const CodeEditor = ({
             value={jsValue}
             onChange={setJSValue}
             theme={"dark"}
-            className="h-full border-t bg-[#282C34] overflow-auto" // Removed overflow-x-hidden to ensure wrapping works
+            className="h-full border-t bg-[#282C34] overflow-auto"
           />
         </div>
 
@@ -115,7 +146,7 @@ const CodeEditor = ({
             value={cssValue}
             onChange={setCssValue}
             theme={"dark"}
-            className="h-full border-t bg-[#282C34] overflow-auto" // Removed overflow-x-hidden to ensure wrapping works
+            className="h-full border-t bg-[#282C34] overflow-auto"
           />
         </div>
       </div>
@@ -123,7 +154,7 @@ const CodeEditor = ({
       {/* Preview */}
       <div className="border h-[40vh]">
         <iframe
-          srcDoc={srcDoc} // Use the ref value instead of state
+          srcDoc={srcDoc}
           title="output"
           sandbox="allow-scripts"
           frameBorder={"0"}
