@@ -9,7 +9,7 @@ import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
 import defaultAvatar from "@/public/defaultAvatar.png";
 import { Ellipsis, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import axios from "axios";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -111,7 +111,7 @@ const DashBoardPage = async () => {
                     />
                   </div>
                   <div className="text-xs text-muted-foreground flex flex-col">
-                    <div>By-{user?.username}</div>
+                    <div>By-{user?.username || user?.firstName}</div>
                     <div>
                       <span>Last updated •</span>
                       <span>
