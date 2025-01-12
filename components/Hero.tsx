@@ -18,7 +18,7 @@ const Hero = () => {
             our community and win prizes
           </p>
           <div className="mt-4">
-            <Link href={"/workspace"}>
+            <Link href={"/dashboard"}>
               <Button className="bg-lime-400 text-black w-full mb-2 hover:bg-lime-500">
                 Start Coding
               </Button>
