@@ -5,6 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 // Zod schema for form validation
 const scribeSchema = z.object({
@@ -48,18 +52,20 @@ export default function CreateScribeForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4  max-w-[900px] mx-3"
+    >
       <div>
-        <label htmlFor="title" className="block text-sm font-medium">
-          Title
-        </label>
-        <input
+        <Label htmlFor="title">Title</Label>
+        <Input
           id="title"
           type="text"
           {...register("title")}
           className={`border ${
-            errors.title ? "border-red-500" : "border-gray-300"
+            errors.title ? "border-red-500" : ""
           } p-2 w-full`}
+          placeholder="e.g. Responsive Navbar"
         />
         {errors.title && (
           <p className="text-red-500 text-sm">{errors.title.message}</p>
@@ -67,28 +73,25 @@ export default function CreateScribeForm() {
       </div>
 
       <div>
-        <label htmlFor="description" className="block text-sm font-medium">
+        <Label htmlFor="description" className="block text-sm font-medium">
           Description
-        </label>
-        <textarea
+        </Label>
+        <Textarea
           id="description"
           {...register("description")}
           className={`border ${
-            errors.description ? "border-red-500" : "border-gray-300"
+            errors.description ? "border-red-500" : ""
           } p-2 w-full`}
-        ></textarea>
+          placeholder="Write a brief description of your scribe"
+        ></Textarea>
         {errors.description && (
           <p className="text-red-500 text-sm">{errors.description.message}</p>
         )}
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
+      <Button type="submit" disabled={loading} className="px-4 py-2 rounded">
         {loading ? "Creating..." : "Create Scribe"}
-      </button>
+      </Button>
 
       {message && <p className="mt-2 text-sm">{message}</p>}
     </form>
