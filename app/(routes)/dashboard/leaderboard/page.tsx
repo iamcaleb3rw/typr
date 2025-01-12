@@ -1,7 +1,6 @@
 import { db } from "@/db";
 import { coders, likes } from "@/db/schema";
 import { sql, eq, desc } from "drizzle-orm";
-import { Heart } from "lucide-react";
 import React from "react";
 
 const page = async () => {
@@ -37,25 +36,25 @@ const page = async () => {
           </thead>
           <tbody>
             {coderWithMostLikes.map((coder, index) => (
-              <tr key={coder.coderId} className="border-b">
-                <td className="px-4 py-2 w-16">
+              <tr
+                key={coder.coderId}
+                className={`rounded-md ${index % 2 === 0 ? "bg-muted/30" : ""}`}
+              >
+                <td className="rounded-tl-lg rounded-bl-lg px-4 py-2 w-16">
                   {index === 0 ? (
-                    <span className=" p-2 text-white">🥇</span>
+                    <span className="p-2">🥇</span>
                   ) : index === 1 ? (
-                    <span className=" p-2  text-white">🥈</span>
+                    <span className="p-2 text-white">🥈</span>
                   ) : index === 2 ? (
-                    <span className=" p-2 bg-bronze-500 text-white">🥉</span>
+                    <span className=" p-2 bg-bronze-500">🥉</span>
                   ) : (
-                    <span className="p-2">#{index + 1}</span>
+                    <span className="p-2">{index + 1}</span>
                   )}
                 </td>
                 <td className="px-4 py-2">{coder.username}</td>
                 <td className="px-4 py-2">{coder.email}</td>
-                <td className="px-4 py-2">
-                  <span className="flex">
-                    <Heart color="red" fill="red" />
-                    {coder.totalLikes}
-                  </span>
+                <td className="px-4 py-2 rounded-tr-lg rounded-br-lg">
+                  {coder.totalLikes}
                 </td>
               </tr>
             ))}

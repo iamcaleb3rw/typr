@@ -14,37 +14,38 @@ import { Cog, Compass, LayoutList, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
-
-const platformRoutes = [
-  {
-    label: "My Scribes",
-    icon: LayoutList,
-    path: "/dashboard",
-  },
-  {
-    label: "Leaderboard",
-    icon: TbTrophy,
-    path: "/dashboard/leaderboard",
-  },
-  {
-    label: "Explore",
-    icon: Compass,
-    path: "/dashboard/explore",
-  },
-  {
-    label: "Create a scribe",
-    icon: PlusCircle,
-    path: "/dashboard/newscribe",
-  },
-
-  {
-    label: "Settings",
-    icon: Cog,
-    path: "/dashboard/settings",
-  },
-];
+import { useAuth } from "@clerk/nextjs";
 
 export function NavMain() {
+  const { userId } = useAuth();
+  const platformRoutes = [
+    {
+      label: "My Scribes",
+      icon: LayoutList,
+      path: "/dashboard",
+    },
+    {
+      label: "Leaderboard",
+      icon: TbTrophy,
+      path: "/dashboard/leaderboard",
+    },
+    {
+      label: "Explore",
+      icon: Compass,
+      path: "/dashboard/explore",
+    },
+    {
+      label: "Create a scribe",
+      icon: PlusCircle,
+      path: "/dashboard/newscribe",
+    },
+
+    {
+      label: "Settings",
+      icon: Cog,
+      path: `/dashboard/${userId}`,
+    },
+  ];
   const path = usePathname();
   return (
     <SidebarGroup>
