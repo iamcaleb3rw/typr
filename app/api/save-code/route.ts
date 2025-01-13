@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { id, html, css, js } = body;
-    if (!id || !html || !css || !js) {
+    if (!id) {
       return NextResponse.json(
         { error: "Missing required fields." },
         { status: 402 }

@@ -1,14 +1,20 @@
 import { db } from "@/db";
-import { scribes } from "@/db/schema";
+import { likes, scribes } from "@/db/schema";
 
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { desc, eq } from "drizzle-orm";
+import { count, desc, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 
 import Image from "next/image";
 import defaultAvatar from "@/public/defaultAvatar.png";
-import { Ellipsis, Heart } from "lucide-react";
+import {
+  Ellipsis,
+  Heart,
+  Pencil,
+  SquareArrowOutUpRight,
+  Trash,
+} from "lucide-react";
 import axios from "axios";
 import {
   DropdownMenu,
@@ -19,6 +25,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import DashboardDialog from "@/components/DashboardDialog";
 
 const DashBoardPage = async () => {
   const { userId } = await auth();
@@ -26,11 +41,32 @@ const DashBoardPage = async () => {
   if (!userId) {
     return redirect("/sign-up");
   }
+
+  // Fetch scribe projects
   const scribesProjects = await db
     .select()
     .from(scribes)
     .where(eq(scribes.authorId, userId))
     .orderBy(desc(scribes.updatedAt));
+
+  // Get likes count for all scribe IDs in one query
+  const scribeIds = scribesProjects.map((project) => project.id);
+  const likesData = await db
+    .select({
+      scribeId: likes.scribeId,
+      count: count(),
+    })
+    .from(likes)
+    .where(sql`${likes.scribeId} IN (${scribeIds})`)
+    .groupBy(likes.scribeId);
+
+  // Map likes count to the respective scribe
+  const likesMap = likesData.reduce((acc, like) => {
+    acc[like.scribeId] = like.count;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const handleClick = () => {};
 
   return (
     <div className="px-3">
@@ -55,6 +91,8 @@ const DashBoardPage = async () => {
             ? ((jsLength / totalLength) * 100).toFixed(1)
             : "0.00";
 
+          const likesCount = likesMap[project.id] || 0; // Get likes count for the current scribe
+
           return (
             <div
               key={project.id}
@@ -65,9 +103,6 @@ const DashBoardPage = async () => {
                   <div className="text-xl  p-2 flex justify-between items-center">
                     <div className="mx-3 my-1">{project.title}</div>
                     <div className="flex gap-1">
-                      <div>
-                        <Heart className="font-thin w-5 h-5" fill="#fff" />
-                      </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger>
                           <Ellipsis className="h-5 w-5" />
@@ -75,23 +110,39 @@ const DashBoardPage = async () => {
                         <DropdownMenuContent>
                           <DropdownMenuLabel>Scribe Menu</DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem>
+                          <DropdownMenuItem className="flex">
                             <Link
                               href={`/workspace/${project.id}`}
                               target="_blank"
+                              className="flex items-center gap-2"
                             >
-                              Go to scribe scribe
+                              <span>
+                                <SquareArrowOutUpRight />
+                              </span>{" "}
+                              Go to scribe
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Link
-                              href={`/workspace/${project.id}`}
-                              target="_blank"
-                            >
-                              Edit scribe
-                            </Link>
+                          <DropdownMenuItem className="flex items-center gap-2">
+                            <DashboardDialog
+                              title={"Edit scribe"}
+                              description={
+                                <span>
+                                  Make changes to the scribe here. Do not worry
+                                  you can change this later
+                                </span>
+                              }
+                              buttonText={"Save changes"}
+                              initialTitle={project.title}
+                              initialDescription={project.description || ""}
+                              scribeId={project.id}
+                            />
                           </DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuItem className="flex items-center gap-2">
+                            <span>
+                              <Trash />
+                            </span>{" "}
+                            Delete
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
@@ -130,7 +181,13 @@ const DashBoardPage = async () => {
                   </div>
                 </div>
               </div>
-              <div className="row-span-2 p-2 mt-2">
+              <div className="row-span-2 p-2 mt-1">
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-semibold text-foreground">
+                    {likesCount}
+                  </span>{" "}
+                  likes
+                </p>
                 <p className="text-xs">
                   Total Code Length: {totalLength} characters
                 </p>
@@ -147,9 +204,8 @@ const DashBoardPage = async () => {
                   <p>JS: {jsPercentage}%</p>
                 </div>
               </div>
-              <div className="w-full h-2 px-3">
+              <div className="w-full h-2 px-3 mt-4">
                 <div className="w-full h-full rounded-sm flex overflow-hidden">
-                  {/* Dynamically set widths based on percentages */}
                   <div
                     className="bg-orange-500 h-full"
                     style={{ width: `${htmlPercentage}%` }}

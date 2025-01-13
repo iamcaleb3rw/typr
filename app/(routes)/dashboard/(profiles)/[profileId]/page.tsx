@@ -184,7 +184,7 @@ const ScribeId = async (props: { params: Params }) => {
                   <div className="text-xs text-muted-foreground flex flex-col">
                     <div>
                       By-
-                      {profile[0].email || profile[0].email}
+                      {profile[0].username || profile[0].email}
                     </div>
                     <div>
                       <span>Last updated •</span>

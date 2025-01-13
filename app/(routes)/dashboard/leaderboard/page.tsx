@@ -2,6 +2,16 @@ import { db } from "@/db";
 import { coders, scribes, likes } from "@/db/schema";
 import { sql, eq, desc } from "drizzle-orm";
 import React from "react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Heart } from "lucide-react";
 
 const page = async () => {
   // Fetch coders whose scribes received the most likes
@@ -24,42 +34,52 @@ const page = async () => {
       <h1 className="text-2xl tracking-tighter font-semibold border-b">
         Leaderboard
       </h1>
-      <div className="mt-4 border-red-400 border overflow-x-scroll">
-        <table className="min-w-full table-auto overflow-hidden">
-          <thead>
-            <tr className="border-b">
-              <th className="px-4 py-2 text-left">Rank</th>
-              <th className="px-4 py-2 text-left">Username</th>
-              <th className="px-4 py-2 text-left">Email</th>
-              <th className="px-4 py-2 text-left">Total Likes</th>
-            </tr>
-          </thead>
-          <tbody>
+      <div className="mt-4  overflow-auto">
+        <Table className="border">
+          <TableCaption>Most Liked Coders | Leaderboard</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Rank</TableHead>
+              <TableHead>Username</TableHead>
+              <TableHead className="hidden md:table-cell">Email</TableHead>
+              <TableHead className="text-right">Total Likes</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {coderWithMostLikes.map((coder, index) => (
-              <tr
+              <TableRow
                 key={coder.coderId}
-                className={`rounded-md ${index % 2 === 0 ? "bg-muted/30" : ""}`}
+                className={index % 2 === 0 ? "bg-muted/30" : ""}
               >
-                <td className="rounded-tl-lg rounded-bl-lg px-4 py-2 w-16">
+                <TableCell className="font-medium">
                   {index === 0 ? (
                     <span className="p-2">🥇</span>
                   ) : index === 1 ? (
                     <span className="p-2 text-white">🥈</span>
                   ) : index === 2 ? (
-                    <span className=" p-2 bg-bronze-500">🥉</span>
+                    <span className="p-2 bg-bronze-500">🥉</span>
                   ) : (
                     <span className="p-2">{index + 1}</span>
                   )}
-                </td>
-                <td className="px-4 py-2">{coder.username}</td>
-                <td className="px-4 py-2">{coder.email}</td>
-                <td className="px-4 py-2 rounded-tr-lg rounded-br-lg">
-                  {coder.totalLikes}
-                </td>
-              </tr>
+                </TableCell>
+                <TableCell>
+                  <span className="block max-w-[150px] truncate">
+                    {coder.username}
+                  </span>
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {coder.email}
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex text-right items-center gap-1 justify-end">
+                    <Heart color="red" fill="red" />
+                    {coder.totalLikes}
+                  </div>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

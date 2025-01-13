@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { FaHtml5 } from "react-icons/fa";
+import { FaCss3Alt } from "react-icons/fa";
 import { toast } from "sonner";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
@@ -10,6 +12,7 @@ import { Button } from "./ui/button";
 import { Heart, Loader2 } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import { v4 as uuidv4 } from "uuid";
+import { SiJavascript } from "react-icons/si";
 import { db } from "@/db";
 import { count } from "drizzle-orm";
 
@@ -67,9 +70,9 @@ const CodeEditor = ({
       setSaving(true);
       const response = await axios.post("/api/save-code", {
         id,
-        html: htmlValue,
-        css: cssValue,
-        js: jsValue,
+        html: htmlValue || "",
+        css: cssValue || "",
+        js: jsValue || "",
       });
 
       if (response.status === 200) {
@@ -194,7 +197,8 @@ const CodeEditor = ({
       <div className="grid grid-cols-3 gap-1">
         {/* HTML Editor */}
         <div className="relative border bg-[#282C34] h-[50vh] flex flex-col rounded-md overflow-hidden">
-          <div className="sticky top-0 z-30 bg-lime-400 px-2 py-1 rounded-t-md">
+          <div className="sticky top-0 z-30 font-semibold bg-muted/30 text-sm flex items-center gap-2  px-2 py-1 rounded-t-md">
+            <FaHtml5 color="orange" size={20} />
             HTML
           </div>
           <CodeMirror
@@ -208,8 +212,9 @@ const CodeEditor = ({
 
         {/* JavaScript Editor */}
         <div className="relative border bg-[#282C34] h-[50vh] flex flex-col rounded-md overflow-hidden">
-          <div className="sticky top-0 z-30 bg-lime-400 px-2 py-1 rounded-t-md">
-            JS
+          <div className="sticky top-0 z-30 font-semibold bg-muted/30 text-sm flex items-center gap-2  px-2 py-1 rounded-t-md">
+            <SiJavascript color="#F7E025" size={18} />
+            JavaScript
           </div>
           <CodeMirror
             extensions={[javascript({ jsx: true }), EditorView.lineWrapping]} // Correctly enable line wrapping
@@ -222,7 +227,8 @@ const CodeEditor = ({
 
         {/* CSS Editor */}
         <div className="relative border bg-[#282C34] h-[50vh] flex flex-col rounded-md overflow-hidden">
-          <div className="sticky top-0 z-30 bg-lime-400 px-2 py-1 rounded-t-md">
+          <div className="sticky top-0 z-30 font-semibold bg-muted/30 text-sm flex items-center gap-2  px-2 py-1 rounded-t-md">
+            <FaCss3Alt color="#2D53E5" size={18} />
             CSS
           </div>
           <CodeMirror
