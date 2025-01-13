@@ -122,9 +122,15 @@ const Explore = async () => {
                     />
                   </div>
                   <div className="text-xs text-muted-foreground flex flex-col">
-                    <div>
-                      By - {project.author.username || project.author.email}
-                    </div>
+                    <Link
+                      href={`/dashboard/${project.authorId}`}
+                      className="underline"
+                    >
+                      <div>
+                        By - {project.author.username || project.author.email}
+                      </div>
+                    </Link>
+
                     <div>
                       <span>Last updated •</span>
                       <span>

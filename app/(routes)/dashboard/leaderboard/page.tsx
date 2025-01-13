@@ -1,10 +1,10 @@
 import { db } from "@/db";
-import { coders, likes } from "@/db/schema";
+import { coders, scribes, likes } from "@/db/schema";
 import { sql, eq, desc } from "drizzle-orm";
 import React from "react";
 
 const page = async () => {
-  // Fetch coders with the most likes
+  // Fetch coders whose scribes received the most likes
   const coderWithMostLikes = await db
     .select({
       coderId: coders.id,
@@ -13,19 +13,19 @@ const page = async () => {
       totalLikes: sql<number>`COUNT(${likes.id})`.as("totalLikes"),
     })
     .from(coders)
-    .leftJoin(likes, eq(coders.id, likes.coderId))
+    .leftJoin(scribes, eq(coders.id, scribes.authorId)) // Join coders with their scribes
+    .leftJoin(likes, eq(scribes.id, likes.scribeId)) // Join scribes with likes
     .groupBy(coders.id, coders.username, coders.email)
-    // Use COUNT directly in ORDER BY
-    .orderBy(desc(sql<number>`COUNT(${likes.id})`))
-    .limit(10); // Change limit as per your needs, for top 10 users
+    .orderBy(desc(sql<number>`COUNT(${likes.id})`)) // Order by the number of likes
+    .limit(10); // Fetch top 10 coders
 
   return (
     <div className="px-3">
       <h1 className="text-2xl tracking-tighter font-semibold border-b">
         Leaderboard
       </h1>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full table-auto">
+      <div className="mt-4 border-red-400 border overflow-x-scroll">
+        <table className="min-w-full table-auto overflow-hidden">
           <thead>
             <tr className="border-b">
               <th className="px-4 py-2 text-left">Rank</th>
