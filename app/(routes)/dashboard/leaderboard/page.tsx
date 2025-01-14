@@ -26,8 +26,7 @@ const page = async () => {
     .leftJoin(scribes, eq(coders.id, scribes.authorId)) // Join coders with their scribes
     .leftJoin(likes, eq(scribes.id, likes.scribeId)) // Join scribes with likes
     .groupBy(coders.id, coders.username, coders.email)
-    .orderBy(desc(sql<number>`COUNT(${likes.id})`)) // Order by the number of likes
-    .limit(10); // Fetch top 10 coders
+    .orderBy(desc(sql<number>`COUNT(${likes.id})`)); // Order by the number of likes // Fetch top 10 coders
 
   return (
     <div className="px-3">
