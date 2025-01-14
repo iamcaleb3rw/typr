@@ -15,7 +15,6 @@ export function TeamSwitcher() {
   const { user } = useUser();
 
   const userEmail = user?.primaryEmailAddress?.emailAddress ?? "";
-  console.log(user);
 
   return (
     <SidebarMenu>
