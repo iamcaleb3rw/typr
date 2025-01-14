@@ -59,7 +59,7 @@ export default function UpdateScribeForm({
       reset(data);
       // Reset form fields with updated values
     } catch (error: any) {
-      console.error(error);
+      console.log(error);
       setMessage(
         error.response?.data?.error || "An unexpected error occurred."
       );
