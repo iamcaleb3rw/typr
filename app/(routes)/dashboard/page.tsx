@@ -1,11 +1,9 @@
 import { db } from "@/db";
 import { likes, scribes } from "@/db/schema";
-
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { count, desc, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
-
 import Image from "next/image";
 import defaultAvatar from "@/public/defaultAvatar.png";
 import {
@@ -35,6 +33,12 @@ import {
 } from "@/components/ui/dialog";
 import DashboardDialog from "@/components/DashboardDialog";
 
+// Define the type for likes data
+interface LikesData {
+  scribeId: string;
+  count: number;
+}
+
 const DashBoardPage = async () => {
   const { userId } = await auth();
   const user = await currentUser();
@@ -51,22 +55,24 @@ const DashBoardPage = async () => {
 
   // Get likes count for all scribe IDs in one query
   const scribeIds = scribesProjects.map((project) => project.id);
-  const likesData = await db
-    .select({
-      scribeId: likes.scribeId,
-      count: count(),
-    })
-    .from(likes)
-    .where(sql`${likes.scribeId} IN (${scribeIds})`)
-    .groupBy(likes.scribeId);
+
+  let likesData: LikesData[] = [];
+  if (scribeIds.length > 0) {
+    likesData = await db
+      .select({
+        scribeId: likes.scribeId,
+        count: count(),
+      })
+      .from(likes)
+      .where(sql`${likes.scribeId} IN (${sql.join(scribeIds)})`)
+      .groupBy(likes.scribeId);
+  }
 
   // Map likes count to the respective scribe
   const likesMap = likesData.reduce((acc, like) => {
     acc[like.scribeId] = like.count;
     return acc;
   }, {} as Record<string, number>);
-
-  const handleClick = () => {};
 
   return (
     <div className="px-3">
@@ -100,7 +106,7 @@ const DashBoardPage = async () => {
             >
               <div className="relative justify-between flex flex-col overflow-auto row-span-3 border-b bg-muted">
                 <div>
-                  <div className="text-xl  p-2 flex justify-between items-center">
+                  <div className="text-xl p-2 flex justify-between items-center">
                     <div className="mx-3 my-1">{project.title}</div>
                     <div className="flex gap-1">
                       <DropdownMenu>
@@ -128,7 +134,7 @@ const DashBoardPage = async () => {
                               description={
                                 <span>
                                   Make changes to the scribe here. Do not worry
-                                  you can change this later
+                                  you can change this later.
                                 </span>
                               }
                               buttonText={"Save changes"}
@@ -163,7 +169,7 @@ const DashBoardPage = async () => {
                   </div>
                   <div className="text-xs text-muted-foreground flex flex-col">
                     <div>
-                      By-
+                      By-{" "}
                       {user?.username ||
                         user?.firstName ||
                         user?.primaryEmailAddress?.emailAddress}
