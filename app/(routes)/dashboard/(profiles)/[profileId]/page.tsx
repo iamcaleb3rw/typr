@@ -1,36 +1,18 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import CodeEditor from "@/components/code-editor";
+import Background from "@/components/eldoraui/novatrixbg";
 import { db } from "@/db";
 import { coders, likes, scribes } from "@/db/schema";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { profileEnd } from "console";
 import { and, count, eq } from "drizzle-orm";
-import Image from "next/image";
-import { Ellipsis, Heart } from "lucide-react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
-import defaultAvatar from "@/public/defaultAvatar.png";
-import { formatDistanceToNow } from "date-fns";
-import { UserProfile } from "@clerk/nextjs";
-import Profile from "../../_components/user-profile";
-import UserProfilePage from "@/app/user-profile/[[...user-profile]]/page";
-import { cn } from "@/lib/utils";
-import AnimatedGridPattern from "@/components/ui/animated-grid-pattern";
-import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 
 // Define types for the page props
 type Params = Promise<{ profileId: string }>;
 
 const ScribeId = async (props: { params: Params }) => {
   const { userId } = await auth();
-  const user = await currentUser();
   const params = await props.params;
   const profileId = params.profileId;
   if (!userId) {
@@ -49,62 +31,17 @@ const ScribeId = async (props: { params: Params }) => {
   if (profile.length < 1) {
     return redirect("/");
   }
-  const coderScribes = await db
-    .select()
-    .from(scribes)
-    .where(eq(scribes.authorId, profileId));
-  console.log(profileId);
-
-  const totalLikes = await db
-    .select({ likesCount: count(likes.id) })
-    .from(likes)
-    .innerJoin(scribes, eq(likes.scribeId, scribes.id))
-    .where(eq(scribes.authorId, profileId));
-
   return (
-    <div className="flex flex-col px-1 md:px-3 w-full">
-      <h1 className="text-2xl tracking-tighter font-semibold border-b">
-        Coder profile
-      </h1>
-      <div className="relative flex items-center justify-center rounded-lg overflow-hidden mt-2 border w-full h-[150px]">
-        <AnimatedGradientText>
-          <div
-            className={cn(
-              `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`
-            )}
-          >
-            <p className="text-3xl font-bold">
-              {profile[0].username || profile[0].email}
-            </p>
-          </div>
-        </AnimatedGradientText>
-        <AnimatedGridPattern
-          numSquares={50}
-          maxOpacity={0.03}
-          duration={3}
-          repeatDelay={1}
-          className={cn(
-            "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]",
-            "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12"
-          )}
-        />
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-2">
-        <div className="border min-h-[150px] bg-muted/20 flex items-center flex-col justify-center rounded-md">
-          <h1 className="text-4xl font-bold">
-            {totalLikes[0]?.likesCount || 0}
-          </h1>
-          <p className="text-muted-foreground text-lg">Likes</p>
-        </div>
-        <div className="border min-h-[150px] bg-muted/20 flex items-center flex-col justify-center rounded-md">
-          <h1 className="text-4xl font-bold">{coderScribes.length}</h1>
-          <p className="text-muted-foreground text-lg">Scribes</p>
-        </div>
-        <div className="border min-h-[150px] bg-muted/20 flex items-center flex-col justify-center rounded-md">
-          <h1 className="text-4xl font-bold">4</h1>
-          <p className="text-muted-foreground text-lg">Views</p>
+    <div className="flex flex-col px-3">
+      <div className="relative w-[1000px]">
+        <div className="relative flex items-center justify-center z-10 h-[150px] w-full overflow-hidden rounded-lg border bg-background">
+          <p className="absolute text-orange-500 font-bold text-3xl">
+            {profile[0].username || profile[0].email}
+          </p>
+          <Background />
         </div>
       </div>
+<<<<<<< HEAD
       <h1 className="text-2xl tracking-tighter font-semibold border-b mt-4">
         Scribes
       </h1>
@@ -241,6 +178,8 @@ const ScribeId = async (props: { params: Params }) => {
         Theme
       </h1>
       <div></div>
+=======
+>>>>>>> parent of b3d8910 (Addtional fetching on user profile)
     </div>
   );
 };

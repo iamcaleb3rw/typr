@@ -41,7 +41,7 @@ export function NavMain() {
     },
 
     {
-      label: "Account",
+      label: "Settings",
       icon: Cog,
       path: `/dashboard/${userId}`,
     },

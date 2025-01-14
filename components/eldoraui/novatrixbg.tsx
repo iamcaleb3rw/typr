@@ -104,17 +104,12 @@ export const Novatrix: React.FC<NovatrixProps> = () => {
     };
   }, []);
 
-  return (
-    <div
-      ref={ctnDom}
-      className="gradient-canvas h-[1300px] aspect-square w-full"
-    ></div>
-  );
+  return <div ref={ctnDom} className="gradient-canvas h-full w-full"></div>;
 };
 
 const Background = () => {
   return (
-    <div className="border-red-400 border-2">
+    <div className="h-screen w-screen">
       <Novatrix />
     </div>
   );
