@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { coders, likes } from "@/db/schema";
+import { coders, scribes, likes } from "@/db/schema";
 import { sql, eq, desc } from "drizzle-orm";
 import React from "react";
 import {
@@ -14,7 +14,7 @@ import {
 import { Heart } from "lucide-react";
 
 const page = async () => {
-  // Fetch coders with the most likes
+  // Fetch coders whose scribes received the most likes
   const coderWithMostLikes = await db
     .select({
       coderId: coders.id,
@@ -23,18 +23,17 @@ const page = async () => {
       totalLikes: sql<number>`COUNT(${likes.id})`.as("totalLikes"),
     })
     .from(coders)
-    .leftJoin(likes, eq(coders.id, likes.coderId))
+    .leftJoin(scribes, eq(coders.id, scribes.authorId)) // Join coders with their scribes
+    .leftJoin(likes, eq(scribes.id, likes.scribeId)) // Join scribes with likes
     .groupBy(coders.id, coders.username, coders.email)
-    // Use COUNT directly in ORDER BY
-    .orderBy(desc(sql<number>`COUNT(${likes.id})`))
-    .limit(10); // Change limit as per your needs, for top 10 users
+    .orderBy(desc(sql<number>`COUNT(${likes.id})`)) // Order by the number of likes
+    .limit(10); // Fetch top 10 coders
 
   return (
     <div className="px-3">
       <h1 className="text-2xl tracking-tighter font-semibold border-b">
         Leaderboard
       </h1>
-<<<<<<< HEAD
       <div className="mt-4  overflow-auto">
         <Table className="border">
           <TableCaption>Most Liked Coders | Leaderboard</TableCaption>
@@ -47,19 +46,6 @@ const page = async () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-=======
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full table-auto">
-          <thead>
-            <tr className="border-b">
-              <th className="px-4 py-2 text-left">Rank</th>
-              <th className="px-4 py-2 text-left">Username</th>
-              <th className="px-4 py-2 text-left">Email</th>
-              <th className="px-4 py-2 text-left">Total Likes</th>
-            </tr>
-          </thead>
-          <tbody>
->>>>>>> parent of b3d8910 (Addtional fetching on user profile)
             {coderWithMostLikes.map((coder, index) => (
               <TableRow
                 key={coder.coderId}
