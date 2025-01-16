@@ -4,9 +4,13 @@ import * as React from "react";
 import {
   Calculator,
   Calendar,
+  Compass,
   CreditCard,
+  House,
+  LibraryBig,
   Settings,
   Smile,
+  Trophy,
   User,
 } from "lucide-react";
 import {
@@ -19,6 +23,8 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "./ui/command";
+import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 
 export function CommandDialogDemo() {
   const [open, setOpen] = React.useState(false);
@@ -38,7 +44,7 @@ export function CommandDialogDemo() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-
+  const { userId } = useAuth();
   return (
     <>
       <div
@@ -59,36 +65,34 @@ export function CommandDialogDemo() {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem>
-              <Calculator />
-              <span>Calculator</span>
-            </CommandItem>
+            <Link href="/dashboard" className="cursor-pointer">
+              <CommandItem className="cursor-pointer">
+                <House />
+                <span>Dashboard</span>
+              </CommandItem>
+            </Link>
+
+            <Link href={"/dashboard/leaderboard"}>
+              <CommandItem className="cursor-pointer">
+                <Trophy />
+                <span>Leaderboard</span>
+              </CommandItem>
+            </Link>
+            <Link href={`/dashboard/explore`}>
+              <CommandItem className="cursor-pointer">
+                <Trophy />
+                <span>Explore</span>
+              </CommandItem>
+            </Link>
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Settings">
-            <CommandItem>
-              <User />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Settings />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
+            <Link href={`/dashboard/${userId}`}>
+              <CommandItem className="cursor-pointer">
+                <Trophy />
+                <span>Profile</span>
+              </CommandItem>
+            </Link>
           </CommandGroup>
         </CommandList>
       </CommandDialog>

@@ -7,7 +7,14 @@ import { CommandDialogDemo } from "./Palette";
 import { DiGithubBadge } from "react-icons/di";
 
 import Link from "next/link";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
+import { Button } from "./ui/button";
 
 const Navigation = () => {
   return (
@@ -18,13 +25,21 @@ const Navigation = () => {
         </h1>
       </div>
       <div className="flex items-center gap-2 ">
-        <div className="hidden md:block">
-          <CommandDialogDemo />
-        </div>
         <SignedIn>
+          <div className="hidden md:block">
+            <CommandDialogDemo />
+          </div>
           <UserButton />
         </SignedIn>
-        <SignedOut>Sign In</SignedOut>
+        <SignedOut>
+          <SignInButton>
+            <Button>Log In</Button>
+          </SignInButton>
+
+          <SignUpButton>
+            <Button variant="outline">Sign Up</Button>
+          </SignUpButton>
+        </SignedOut>
         <Link href={"https://github.com/iamcaleb3rw"} target="_blank">
           <DiGithubBadge className="w-6 h-6" />
         </Link>
