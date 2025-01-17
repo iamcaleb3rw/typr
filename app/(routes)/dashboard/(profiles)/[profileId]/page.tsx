@@ -1,9 +1,8 @@
 import CodeEditor from "@/components/code-editor";
-import Background from "@/components/eldoraui/novatrixbg";
 import { db } from "@/db";
 import { coders, likes, scribes } from "@/db/schema";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { profileEnd } from "console";
+
 import { and, count, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import React from "react";
