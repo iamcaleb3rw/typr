@@ -47,7 +47,7 @@ const DashBoardPage = async () => {
         count: count(),
       })
       .from(likes)
-      .where(sql`${likes.scribeId} IN (${sql.join(scribeIds)})`)
+      .where(sql`${likes.scribeId} IN (${sql.join(scribeIds, sql`, `)})`)
       .groupBy(likes.scribeId);
   }
 
