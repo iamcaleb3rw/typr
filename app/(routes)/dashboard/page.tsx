@@ -1,19 +1,10 @@
-import { db } from "@/db";
-import { likes, scribes } from "@/db/schema";
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { count, desc, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { db } from "@/db";
+import { scribes, likes } from "@/db/schema";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
-import defaultAvatar from "@/public/defaultAvatar.png";
-import {
-  Ellipsis,
-  Heart,
-  Pencil,
-  SquareArrowOutUpRight,
-  Trash,
-} from "lucide-react";
-import axios from "axios";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,11 +13,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-
 import DashboardDialog from "@/components/DashboardDialog";
-
-// Define the type for likes data
+import { Ellipsis, SquareArrowOutUpRight, Trash } from "lucide-react";
+import { sql, eq, desc, count } from "drizzle-orm";
+import defaultAvatar from "@/public/defaultAvatar.png";
 interface LikesData {
   scribeId: string;
   count: number;

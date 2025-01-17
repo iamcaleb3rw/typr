@@ -20,6 +20,7 @@ const ScribeId = async (props: { params: Params }) => {
   const user = await currentUser();
   const params = await props.params;
   const profileId = params.profileId;
+
   if (!userId) {
     return redirect("/sign-up");
   }
@@ -33,6 +34,7 @@ const ScribeId = async (props: { params: Params }) => {
     .from(coders)
     .where(eq(coders.id, profileId))
     .limit(1);
+
   if (profile.length < 1) {
     return redirect("/");
   }
@@ -41,11 +43,19 @@ const ScribeId = async (props: { params: Params }) => {
     .select()
     .from(scribes)
     .where(eq(scribes.authorId, profileId));
-  console.log(scribesProjects);
+
+  const totalLikes = await db
+    .select({
+      totalLikes: count(), // Count the total number of likes
+    })
+    .from(likes)
+    .innerJoin(scribes, eq(likes.scribeId, scribes.id)) // Join likes with scribes
+    .where(eq(scribes.authorId, profileId)); // Filter by the author's profileId
+
   return (
-    <div className="flex flex-col px-3  py-2">
+    <div className="flex flex-col px-3 py-2">
       <div className="flex justify-around">
-        <div className=" flex justify-center p-2">
+        <div className="flex justify-center p-2">
           <Image
             src={user?.imageUrl || defaultAvatar}
             alt="profile"
@@ -60,12 +70,16 @@ const ScribeId = async (props: { params: Params }) => {
           </div>
           <div className="flex">
             <div className="border h-[150px] flex flex-col items-center justify-center aspect-square ml-3 mt-3 bg-muted rounded-2xl shadow-xl">
-              <p className="text-4xl font-bold">10</p>
-              <p className="text-muted-foreground">posts</p>
+              <p className="text-4xl font-bold">
+                {totalLikes[0]?.totalLikes || 0}
+              </p>
+              <p className="text-muted-foreground">Likes</p>
             </div>
             <div className="border h-[150px] flex flex-col items-center justify-center aspect-square ml-3 mt-3 bg-muted rounded-2xl shadow-xl">
-              <p className="text-4xl font-bold">10</p>
-              <p className="text-muted-foreground">Likes</p>
+              <p className="text-4xl font-bold">
+                {scribesProjects.length || 0}
+              </p>
+              <p className="text-muted-foreground">Scribes</p>
             </div>
           </div>
         </div>
@@ -75,7 +89,14 @@ const ScribeId = async (props: { params: Params }) => {
       </h1>
       <div>
         {scribesProjects.length >= 1 ? (
-          <div>there is at least one scribe</div>
+          scribesProjects.map((project) => (
+            <Link href={`/workspace/${project.id}`} key={project.id}>
+              <div className="border p-4 my-2 rounded">
+                <h2 className="text-xl font-semibold">{project.title}</h2>
+                <p className="text-muted-foreground">{project.description}</p>
+              </div>
+            </Link>
+          ))
         ) : (
           <div className="min-h-[200px] border-gray-600 rounded-lg border flex items-center justify-center border-dashed mt-2">
             {userId === profileId && (
