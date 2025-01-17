@@ -8,17 +8,17 @@ const Hero = () => {
     <div className="h-[88vh] flex flex-col justify-center items-center text-center">
       <div>
         <p className="h-[40px] border border-dashed border-b-0 border-t-0"></p>
-        <p className="text-6xl font-bold tracking-tighter max-w-[900px] border-dashed border p-4">
+        <p className=" text-3xl md:text-6xl font-bold tracking-tighter max-w-[900px] border-dashed border p-4">
           The HTML playground for modern web developers
         </p>
-        <p className="text-lg text-muted-foreground max-w-[1200px] border-t-0 border-dashed border">
+        <p className="text-md text-muted-foreground max-w-[1200px] border-t-0 border-dashed border p-2">
           Interact with our code editors and{" "}
           <span className="text-foreground font-semibold">share</span> your work{" "}
           <span className="text-foreground font-semibold">
             with the community
           </span>
         </p>
-        <div className="py-8 flex items-center gap-3 justify-center">
+        <div className="py-8 flex flex-col md:flex-row items-center gap-3 justify-center">
           <Button size={"lg"}>
             <SignedIn>
               <Link href={"/dashboard"}>Go to Dashboard</Link>
