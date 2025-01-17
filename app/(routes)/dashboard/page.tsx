@@ -17,6 +17,7 @@ import DashboardDialog from "@/components/DashboardDialog";
 import { Ellipsis, SquareArrowOutUpRight, Trash } from "lucide-react";
 import { sql, eq, desc, count } from "drizzle-orm";
 import defaultAvatar from "@/public/defaultAvatar.png";
+import DeleteDialog from "@/components/Delete";
 interface LikesData {
   scribeId: string;
   count: number;
@@ -113,24 +114,33 @@ const DashBoardPage = async () => {
                           </DropdownMenuItem>
                           <DropdownMenuItem className="flex items-center gap-2">
                             <DashboardDialog
-                              title={"Edit scribe"}
+                              title={
+                                "Change the title and description of your scribe"
+                              }
                               description={
                                 <span>
-                                  Make changes to the scribe here. Do not worry
-                                  you can change this later.
+                                  Do not worry, you can always change this later
                                 </span>
                               }
-                              buttonText={"Save changes"}
+                              buttonText={"Delete Scribe"}
                               initialTitle={project.title}
                               initialDescription={project.description || ""}
                               scribeId={project.id}
                             />
                           </DropdownMenuItem>
                           <DropdownMenuItem className="flex items-center gap-2">
-                            <span>
-                              <Trash />
-                            </span>{" "}
-                            Delete
+                            <DeleteDialog
+                              title="Are you sure?"
+                              description={
+                                <span>
+                                  This action cannot be undone. This will
+                                  permanently delete the scribe and all of its
+                                  content.
+                                </span>
+                              }
+                              scribeId={project.id}
+                              buttonText="Delete Scribe"
+                            />
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

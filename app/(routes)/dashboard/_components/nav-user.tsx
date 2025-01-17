@@ -10,6 +10,9 @@ import {
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
+
+import { SignOutButton, useAuth } from "@clerk/nextjs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +33,7 @@ import { useUser } from "@clerk/nextjs";
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user } = useUser();
+  const { userId } = useAuth();
   const userEmail =
     user?.primaryEmailAddress?.emailAddress || "No email available";
   const userInitials = user?.username?.slice(0, 2).toUpperCase() || "CAL";
@@ -86,30 +90,41 @@ export function NavUser() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <House />
-                Back to homepage
-              </DropdownMenuItem>
+              <Link href={`/`} className="flex gap-2 w-full">
+                <DropdownMenuItem>
+                  <House />
+                  Back to homepage
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
+              <Link
+                href={`/dashboard/${userId}`}
+                className="flex gap-2 w-full hover:bg-muted cursor-pointer rounded-sm"
+              >
+                <DropdownMenuItem>
+                  <BadgeCheck />
+                  Account
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem className="hidden">
                 <HelpCircle />
                 Help
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem className="hidden">
                 <Bell />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <LogOut />
-              Log out
+              <SignOutButton>
+                <div className="flex gap-2">
+                  <LogOut />
+                  Log out
+                </div>
+              </SignOutButton>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
