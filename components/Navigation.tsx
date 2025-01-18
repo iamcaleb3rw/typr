@@ -19,7 +19,7 @@ import { Button } from "./ui/button";
 const Navigation = () => {
   return (
     <nav className="border-b flex items-center justify-between px-4 py-3">
-      <div>
+      <div className="cursor-pointer">
         <h1 className="text-2xl font-semibold">
           ty<span className="text-lime-400">pr_</span>
         </h1>

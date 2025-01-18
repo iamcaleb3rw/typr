@@ -16,6 +16,7 @@ import { SiJavascript } from "react-icons/si";
 import { db } from "@/db";
 import { count } from "drizzle-orm";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface EditorProps {
   initialHtml: string | null | undefined;
@@ -145,6 +146,7 @@ const CodeEditor = ({
       // Check if "Ctrl" (or "Cmd") and "S" are pressed simultaneously
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault(); // Prevent the default save action
+
         handleSave(); // Trigger the save function
       }
     };
@@ -182,7 +184,10 @@ const CodeEditor = ({
               onClick={handleSave}
               disabled={saving}
               variant={"outline"}
-              className="px-1 rounded-xl hover:bg-muted/30"
+              className={cn(
+                "px-1 rounded-xl hover:bg-muted/30",
+                !isAuthor && "hidden"
+              )}
             >
               {saving ? (
                 <div className="flex items-center gap-2">
