@@ -5,7 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import { ClerkProvider } from "@clerk/nextjs";
-import MetaDataImage from "@/public/MetadataImage.png";
+import MetaDataImg from "@/public/MetaDataImg.png";
 export const metadata: Metadata = {
   title: "Typr | Playground",
   description:
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: MetaDataImage.src,
+        url: MetaDataImg.src,
         alt: "Visit the Typr Playground",
       },
     ],
