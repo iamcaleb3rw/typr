@@ -76,9 +76,6 @@ const Explore = async () => {
                   <div className="text-xl p-2 flex justify-between items-center">
                     <div className="mx-3 my-1">{project.title}</div>
                     <div className="flex gap-1">
-                      <div>
-                        <Heart className="font-thin w-5 h-5" fill="#fff" />
-                      </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger>
                           <Ellipsis className="h-5 w-5" />
@@ -102,7 +99,6 @@ const Explore = async () => {
                               Edit scribe
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
