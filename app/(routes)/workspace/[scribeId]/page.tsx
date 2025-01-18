@@ -46,7 +46,7 @@ const ScribeId = async (props: { params: Params }) => {
       .select()
       .from(likes)
       .where(and(eq(likes.scribeId, scribeId), eq(likes.coderId, userId)));
-    const { html, css, js, title } = scribe[0];
+    const { html, css, js, title, authorId } = scribe[0];
     const isAlreadyLiked = existingLike.length > 0;
     const totalLikes = likeCount[0].count;
 
@@ -54,6 +54,7 @@ const ScribeId = async (props: { params: Params }) => {
       <div>
         <CodeEditor
           initialHtml={html}
+          authorId={authorId}
           initialCss={css}
           initialJs={js}
           id={scribeId}
