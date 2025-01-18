@@ -5,7 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import { ClerkProvider } from "@clerk/nextjs";
-import MetaDataImg from "@/public/MetaDataImg.png";
+import MetaDataImg from "@/public/MdImg.png";
 export const metadata: Metadata = {
   title: "Typr | Playground",
   description:
