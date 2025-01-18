@@ -40,9 +40,7 @@ const Navigation = () => {
             <Button variant="outline">Sign Up</Button>
           </SignUpButton>
         </SignedOut>
-        <Link href={"https://github.com/iamcaleb3rw"} target="_blank">
-          <DiGithubBadge className="w-6 h-6" />
-        </Link>
+
         <ModeToggle />
       </div>
     </nav>

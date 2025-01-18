@@ -80,7 +80,7 @@ export function CommandDialogDemo() {
             </Link>
             <Link href={`/dashboard/explore`}>
               <CommandItem className="cursor-pointer">
-                <Trophy />
+                <Compass />
                 <span>Explore</span>
               </CommandItem>
             </Link>
@@ -89,7 +89,7 @@ export function CommandDialogDemo() {
           <CommandGroup heading="Settings">
             <Link href={`/dashboard/${userId}`}>
               <CommandItem className="cursor-pointer">
-                <Trophy />
+                <User />
                 <span>Profile</span>
               </CommandItem>
             </Link>

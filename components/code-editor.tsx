@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import { SiJavascript } from "react-icons/si";
 import { db } from "@/db";
 import { count } from "drizzle-orm";
+import Link from "next/link";
 
 interface EditorProps {
   initialHtml: string | null | undefined;
@@ -157,6 +158,9 @@ const CodeEditor = ({
       <div className="flex items-center justify-between px-5 py-1">
         <div>{title}</div>
         <div className="flex items-center gap-4">
+          <Link href={`/dashboard`}>
+            <Button variant={"outline"}>Back to Dashboard</Button>
+          </Link>
           <div
             onClick={!isLiked ? handleLike : handleDislike}
             className="flex items-center cursor-pointer text-sm gap-2"
