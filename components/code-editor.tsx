@@ -25,6 +25,7 @@ interface EditorProps {
   title: string | null | undefined;
   likes: any;
   isAlreadyLiked: boolean;
+  authorId: string | null | undefined;
 }
 
 const CodeEditor = ({
@@ -34,9 +35,13 @@ const CodeEditor = ({
   id,
   likes,
   isAlreadyLiked,
+  authorId,
   title,
 }: EditorProps) => {
   const { userId } = useAuth();
+
+  const isAuthor = authorId === userId;
+  console.log(isAuthor);
 
   const [likeCount, setLikeCount] = useState(likes);
   const [isLiked, setIsLiked] = useState<boolean>(isAlreadyLiked);
@@ -211,6 +216,7 @@ const CodeEditor = ({
             onChange={setHtmlValue}
             theme={"dark"}
             className="h-full border-t w-[700px] bg-[#282C34] overflow-auto"
+            readOnly={!isAuthor}
           />
         </div>
 
@@ -226,6 +232,7 @@ const CodeEditor = ({
             onChange={setJSValue}
             theme={"dark"}
             className="h-full border-t bg-[#282C34] overflow-auto"
+            readOnly={!isAuthor}
           />
         </div>
 
@@ -241,6 +248,7 @@ const CodeEditor = ({
             onChange={setCssValue}
             theme={"dark"}
             className="h-full border-t bg-[#282C34] overflow-auto"
+            readOnly={!isAuthor}
           />
         </div>
       </div>
