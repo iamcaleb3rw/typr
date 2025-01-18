@@ -91,14 +91,6 @@ const Explore = async () => {
                               Go to scribe
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Link
-                              href={`/workspace/${project.id}`}
-                              target="_blank"
-                            >
-                              Edit scribe
-                            </Link>
-                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
