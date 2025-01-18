@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DashboardDialog from "@/components/DashboardDialog";
 import {
+  Compass,
   Ellipsis,
   PlusCircle,
   SquareArrowOutUpRight,
@@ -69,170 +70,171 @@ const DashBoardPage = async () => {
       <h1 className="text-2xl tracking-tighter font-semibold border-b">
         My Scribes
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-3">
-        {scribesProjects.length > 0 ? (
-          <div>
-            {scribesProjects.map((project) => {
-              const htmlLength = (project.html ?? "").length;
-              const cssLength = (project.css ?? "").length;
-              const jsLength = (project.js ?? "").length;
 
-              const totalLength = htmlLength + cssLength + jsLength;
+      {scribesProjects.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-3">
+          {scribesProjects.map((project) => {
+            const htmlLength = (project.html ?? "").length;
+            const cssLength = (project.css ?? "").length;
+            const jsLength = (project.js ?? "").length;
 
-              const htmlPercentage = totalLength
-                ? ((htmlLength / totalLength) * 100).toFixed(1)
-                : "0.00";
-              const cssPercentage = totalLength
-                ? ((cssLength / totalLength) * 100).toFixed(1)
-                : "0.00";
-              const jsPercentage = totalLength
-                ? ((jsLength / totalLength) * 100).toFixed(1)
-                : "0.00";
+            const totalLength = htmlLength + cssLength + jsLength;
 
-              const likesCount = likesMap[project.id] || 0; // Get likes count for the current scribe
+            const htmlPercentage = totalLength
+              ? ((htmlLength / totalLength) * 100).toFixed(1)
+              : "0.00";
+            const cssPercentage = totalLength
+              ? ((cssLength / totalLength) * 100).toFixed(1)
+              : "0.00";
+            const jsPercentage = totalLength
+              ? ((jsLength / totalLength) * 100).toFixed(1)
+              : "0.00";
 
-              return (
-                <div
-                  key={project.id}
-                  className="relative overflow-hidden border h-[270px] pb-2 rounded-xl grid grid-rows-5"
-                >
-                  <div className="relative justify-between flex flex-col overflow-auto row-span-3 border-b bg-muted">
-                    <div>
-                      <div className="text-xl p-2 flex justify-between items-center">
-                        <div className="mx-3 my-1">{project.title}</div>
-                        <div className="flex gap-1">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger>
-                              <Ellipsis className="h-5 w-5" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                              <DropdownMenuLabel>Scribe Menu</DropdownMenuLabel>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem className="flex">
-                                <Link
-                                  href={`/workspace/${project.id}`}
-                                  target="_blank"
-                                  className="flex items-center gap-2"
-                                >
+            const likesCount = likesMap[project.id] || 0; // Get likes count for the current scribe
+
+            return (
+              <div
+                key={project.id}
+                className="relative overflow-hidden border h-[270px] pb-2 rounded-xl grid grid-rows-5"
+              >
+                <div className="relative justify-between flex flex-col overflow-auto row-span-3 border-b bg-muted">
+                  <div>
+                    <div className="text-xl p-2 flex justify-between items-center">
+                      <div className="mx-3 my-1">{project.title}</div>
+                      <div className="flex gap-1">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger>
+                            <Ellipsis className="h-5 w-5" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuLabel>Scribe Menu</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="flex">
+                              <Link
+                                href={`/workspace/${project.id}`}
+                                target="_blank"
+                                className="flex items-center gap-2"
+                              >
+                                <span>
+                                  <SquareArrowOutUpRight />
+                                </span>{" "}
+                                Go to scribe
+                              </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="flex items-center gap-2">
+                              <DashboardDialog
+                                title={
+                                  "Change the title and description of your scribe"
+                                }
+                                description={
                                   <span>
-                                    <SquareArrowOutUpRight />
-                                  </span>{" "}
-                                  Go to scribe
-                                </Link>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="flex items-center gap-2">
-                                <DashboardDialog
-                                  title={
-                                    "Change the title and description of your scribe"
-                                  }
-                                  description={
-                                    <span>
-                                      Do not worry, you can always change this
-                                      later
-                                    </span>
-                                  }
-                                  buttonText={"Delete Scribe"}
-                                  initialTitle={project.title}
-                                  initialDescription={project.description || ""}
-                                  scribeId={project.id}
-                                />
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="flex items-center gap-2">
-                                <DeleteDialog
-                                  title="Are you sure?"
-                                  description={
-                                    <span>
-                                      This action cannot be undone. This will
-                                      permanently delete the scribe and all of
-                                      its content.
-                                    </span>
-                                  }
-                                  scribeId={project.id}
-                                  buttonText="Delete Scribe"
-                                />
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </div>
-                      <div className="text-xs text-muted-foreground mx-3 p-3">
-                        {project.description || "No description"}
+                                    Do not worry, you can always change this
+                                    later
+                                  </span>
+                                }
+                                buttonText={"Delete Scribe"}
+                                initialTitle={project.title}
+                                initialDescription={project.description || ""}
+                                scribeId={project.id}
+                              />
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="flex items-center gap-2">
+                              <DeleteDialog
+                                title="Are you sure?"
+                                description={
+                                  <span>
+                                    This action cannot be undone. This will
+                                    permanently delete the scribe and all of its
+                                    content.
+                                  </span>
+                                }
+                                scribeId={project.id}
+                                buttonText="Delete Scribe"
+                              />
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </div>
-                    <div className="flex gap-2 mx-3 p-3">
+                    <div className="text-xs text-muted-foreground mx-3 p-3">
+                      {project.description || "No description"}
+                    </div>
+                  </div>
+                  <div className="flex gap-2 mx-3 p-3">
+                    <div>
+                      <Image
+                        src={user?.imageUrl || defaultAvatar}
+                        alt="User profile"
+                        width={30}
+                        height={30}
+                        className="ring-2 rounded-full"
+                      />
+                    </div>
+                    <div className="text-xs text-muted-foreground flex flex-col">
                       <div>
-                        <Image
-                          src={user?.imageUrl || defaultAvatar}
-                          alt="User profile"
-                          width={30}
-                          height={30}
-                          className="ring-2 rounded-full"
-                        />
+                        By-{" "}
+                        {user?.username ||
+                          user?.firstName ||
+                          user?.primaryEmailAddress?.emailAddress}
                       </div>
-                      <div className="text-xs text-muted-foreground flex flex-col">
-                        <div>
-                          By-{" "}
-                          {user?.username ||
-                            user?.firstName ||
-                            user?.primaryEmailAddress?.emailAddress}
-                        </div>
-                        <div>
-                          <span>Last updated •</span>
-                          <span>
-                            {project.updatedAt
-                              ? `${formatDistanceToNow(
-                                  new Date(project.updatedAt)
-                                )} ago`
-                              : "No update available"}
-                          </span>
-                        </div>
+                      <div>
+                        <span>Last updated •</span>
+                        <span>
+                          {project.updatedAt
+                            ? `${formatDistanceToNow(
+                                new Date(project.updatedAt)
+                              )} ago`
+                            : "No update available"}
+                        </span>
                       </div>
-                    </div>
-                  </div>
-                  <div className="row-span-2 p-2 mt-1">
-                    <p className="text-sm text-muted-foreground">
-                      <span className="font-semibold text-foreground">
-                        {likesCount}
-                      </span>{" "}
-                      likes
-                    </p>
-                    <p className="text-xs">
-                      Total Code Length: {totalLength} characters
-                    </p>
-                    <div className="text-xs flex items-center gap-1">
-                      <span className="h-3 w-3 bg-orange-500 rounded-full"></span>
-                      <p>HTML: {htmlPercentage}%</p>
-                    </div>
-                    <div className="text-xs flex items-center gap-1">
-                      <span className="h-3 w-3 bg-blue-500 rounded-full"></span>
-                      <p>CSS: {cssPercentage}%</p>
-                    </div>
-                    <div className="text-xs flex items-center gap-1">
-                      <span className="h-3 w-3 bg-yellow-500 rounded-full"></span>
-                      <p>JS: {jsPercentage}%</p>
-                    </div>
-                  </div>
-                  <div className="w-full h-2 px-3 mt-4">
-                    <div className="w-full h-full rounded-sm flex overflow-hidden">
-                      <div
-                        className="bg-orange-500 h-full"
-                        style={{ width: `${htmlPercentage}%` }}
-                      ></div>
-                      <div
-                        className="bg-blue-500 h-full"
-                        style={{ width: `${cssPercentage}%` }}
-                      ></div>
-                      <div
-                        className="bg-yellow-500 h-full"
-                        style={{ width: `${jsPercentage}%` }}
-                      ></div>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
+                <div className="row-span-2 p-2 mt-1">
+                  <p className="text-sm text-muted-foreground">
+                    <span className="font-semibold text-foreground">
+                      {likesCount}
+                    </span>{" "}
+                    likes
+                  </p>
+                  <p className="text-xs">
+                    Total Code Length: {totalLength} characters
+                  </p>
+                  <div className="text-xs flex items-center gap-1">
+                    <span className="h-3 w-3 bg-orange-500 rounded-full"></span>
+                    <p>HTML: {htmlPercentage}%</p>
+                  </div>
+                  <div className="text-xs flex items-center gap-1">
+                    <span className="h-3 w-3 bg-blue-500 rounded-full"></span>
+                    <p>CSS: {cssPercentage}%</p>
+                  </div>
+                  <div className="text-xs flex items-center gap-1">
+                    <span className="h-3 w-3 bg-yellow-500 rounded-full"></span>
+                    <p>JS: {jsPercentage}%</p>
+                  </div>
+                </div>
+                <div className="w-full h-2 px-3 mt-4">
+                  <div className="w-full h-full rounded-sm flex overflow-hidden">
+                    <div
+                      className="bg-orange-500 h-full"
+                      style={{ width: `${htmlPercentage}%` }}
+                    ></div>
+                    <div
+                      className="bg-blue-500 h-full"
+                      style={{ width: `${cssPercentage}%` }}
+                    ></div>
+                    <div
+                      className="bg-yellow-500 h-full"
+                      style={{ width: `${jsPercentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-3">
           <div className="border-dashed border w-full p-3 min-h-[220px] bg-muted flex flex-col gap-4 items-center justify-center rounded-2xl shadow-md">
             <p className="text-muted-foreground italic">
               You have no scribes yet
@@ -244,8 +246,19 @@ const DashBoardPage = async () => {
               </Button>
             </Link>
           </div>
-        )}
-      </div>
+          <div className="border-dashed border w-full p-3 min-h-[220px] bg-muted flex flex-col gap-4 items-center justify-center rounded-2xl shadow-md">
+            <p className="text-muted-foreground italic">
+              In search of inspiration?
+            </p>
+            <Link href={"/dashboard/explore"}>
+              <Button variant={"outline"}>
+                Explore other scribes
+                <Compass />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
