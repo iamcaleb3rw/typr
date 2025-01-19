@@ -33,7 +33,7 @@ export default function LeaderboardTable() {
   );
 
   if (error) return <div>Failed to load</div>;
-  if (!coderWithMostLikes) return <div>Loading...</div>;
+  if (!coderWithMostLikes) return <div></div>;
 
   return (
     <Table className="border">

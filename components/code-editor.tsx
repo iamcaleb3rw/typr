@@ -176,7 +176,7 @@ const CodeEditor = ({
             <Heart
               className="h-5 w-5"
               fill={isLiked ? "red" : "transparent"}
-              color={isLiked ? "red" : "white"}
+              color={"red"}
             />
           </div>
           <div>

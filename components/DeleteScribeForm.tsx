@@ -35,7 +35,7 @@ export default function DeleteScribeForm({ scribeId }: DeleteScribeFormProps) {
     setMessage("");
     try {
       axios.delete(`/api/delete-scribe`, { data: { id: scribeId } }); // Send DELETE request to delete scribe
-      router.refresh(); // Refresh the page to reflect the updated data
+      router.refresh();
       toast.success("Scribe deleted successfully");
     } catch (error) {
       toast.error("An error occurred. Please try again later.");
