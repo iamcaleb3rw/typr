@@ -163,7 +163,7 @@ const CodeEditor = ({
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-center justify-between px-5 py-1">
-        <div>{title}</div>
+        <div className="hidden md:block">{title}</div>
         <div className="flex items-center gap-4">
           <Link href={`/dashboard`}>
             <Button variant={"outline"}>Back to Dashboard</Button>
@@ -208,7 +208,7 @@ const CodeEditor = ({
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-1">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
         {/* HTML Editor */}
         <div className="relative border bg-[#282C34] h-[50vh] flex flex-col rounded-md overflow-hidden">
           <div className="sticky top-0 z-30 font-semibold bg-muted/30 text-sm flex items-center gap-2  px-2 py-1 rounded-t-md">
