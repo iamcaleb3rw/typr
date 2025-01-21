@@ -28,7 +28,7 @@ const Workspace = () => {
   return (
     <div className="flex flex-col gap-1">
       <div
-        className="grid grid-cols-3 gap-1
+        className="grid grid-cols-1 md:grid-cols-3 gap-1
     "
       >
         {/* HTML Editor */}
